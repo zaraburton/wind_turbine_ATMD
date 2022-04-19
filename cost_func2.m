@@ -38,10 +38,10 @@ TCA;
 %seaDepthData = [ADlat, ADlon, A]
 %TCA = TURBINE CENTER ARRAY
 
-numT = 300; %number of turbines
+num_t = 300; %number of turbines
 tca_one = [53.9717375811227,2.67030658047523];
 
-power = 3.5*numT;  % 3.5MW for 1 turbine
+power = 3.5*num_t;  % 3.5MW for 1 turbine
 
 % Design variables (which get optimised)
 mp_limit_var = -30;
@@ -49,9 +49,9 @@ j_limit_var = -80;
 supportLimits = [mp_limit_var, j_limit_var];
 
 
-[lev_cost_en] = LCOE(power,numT,TCA,ADlat,ADlon,A,supportLimits)
+%[lev_cost_en] = LCOE(power,num_t,TCA,ADlat,ADlon,A,supportLimits)
 
-function [LCOE] = LCOE(totalPower,num_t,TCA,ADlat,ADlon,A,supportLimits)
+%function [LCOE] = LCOE(power,num_t,TCA,ADlat,ADlon,A,supportLimits)
 %LCOE in MWH/EURO
 %   Detailed explanation goes here
     
@@ -153,12 +153,12 @@ nvpCost = pvvar(cash, 0.1);
 
 %% need AEY (annual energy yield) = power (watt) * hrs in yr
 
-AEY = 8760*totalPower;
+AEY = 8760*power; % hours in a year * power (MW)
 yrlyEnergy = AEY*ones([1,yrs]);
 nvpEnergy = pvvar(yrlyEnergy, 0.1);
 
 
-LCOE = nvpCost/nvpEnergy;
-end
+LCOE = nvpCost/nvpEnergy
+%end
 
  
