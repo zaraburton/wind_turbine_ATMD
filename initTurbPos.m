@@ -1,6 +1,8 @@
 function [TCfloris,TCA] = initTurbPos(numT, hubHeight)
 %% Creates initial turbine position arrays for floris & cost function
 
+%number of turbines
+
 max_lat = 54;   %54
 min_lat = 53.7; 
 max_long = 2.8; 
