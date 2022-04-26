@@ -6,10 +6,10 @@
 function [f]=objective1(x)
 
     %Design var
-%     x=tubrine_centres;
+    %x=tubrine_centres;
 
     %constant
-    numT=10;
+    numT=100;
 
     %objective
     [~,lev_cost_en]=model1(numT);

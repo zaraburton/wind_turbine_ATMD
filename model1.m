@@ -17,8 +17,9 @@ function [turbine_centres,lev_cost_en,power]=model1(numT)
     diameters((1:numT)) = 120; %diameter of turbines
     location = turbine_centres; %Mx3 matrix containing coordinates of where to evaluate M values of
     ... wind speed
-    pc = readtable('6MW_powercurve.csv'); % power curve
-    pc = table2array(pc);
+%     pc = readtable('6MW_powercurve.csv'); % power curve
+%     pc = table2array(pc);
+    pc=csvread('6MW_powercurve.csv',1,0);
     
     % bathymetry data cost inputs
     [A,R] = readgeoraster('hsb.tif','OutputType','double');
@@ -37,12 +38,12 @@ function [turbine_centres,lev_cost_en,power]=model1(numT)
         turbine_centres, yaw_angles, diameters, pc, location);
     
     % total power out of floris func
-    totalPowerMW = sum(power)/1000000 %IN megaWATTS
+    totalPowerMW = sum(power)/1000000; %IN megaWATTS
     
     
     
     % LCOE calc (in £/MWhr)
-    [lev_cost_en] = LCOE(totalPowerMW,numT,TCA,ADlat,ADlon,A,supportLimits)
+    [lev_cost_en] = LCOE(totalPowerMW,numT,TCA,ADlat,ADlon,A,supportLimits);
 
     %LCOE history
     

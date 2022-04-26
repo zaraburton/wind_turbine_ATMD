@@ -1,14 +1,13 @@
 %wrapper module
 
-% clear all
-% close all
+clear all
+close all
 
 %% Plot design space
 
-numT=10;
+numT=100;
 hubHeight=167.47;
 [turbine_centres,~] = initTurbPos(numT, hubHeight);
-
 
 %% Optimisation
 
