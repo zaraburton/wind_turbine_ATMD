@@ -7,9 +7,6 @@ function [C,Ceq]=constraints1(x)
 
     %Design var
 
-    %constant
-    numT=300;
-
     %constraints
     [turbine_centres,lev_cost_en]=model1(numT);
 
@@ -20,7 +17,7 @@ function [C,Ceq]=constraints1(x)
         c=111139*(turbine_centres(i,2)-turbine_centres(j,2));
         a=sqrt(b^2+c^2);
 
-            if a<120
+            if a<120 % diameter
                 a=penalty(i,j);
             else
                 penalty(i,j)=0;

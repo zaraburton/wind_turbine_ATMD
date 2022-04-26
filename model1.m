@@ -43,4 +43,7 @@ function [turbine_centres,lev_cost_en,power]=model1(numT)
     
     % LCOE calc (in £/MWhr)
     [lev_cost_en] = LCOE(totalPowerMW,numT,TCA,ADlat,ADlon,A,supportLimits)
+
+    %LCOE history
+    
 end
