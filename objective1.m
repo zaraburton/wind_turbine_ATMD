@@ -6,8 +6,12 @@
 function [f]=objective1(x)
 
     %Design var
-    
+%     x=tubrine_centres;
+
+    %constant
+    numT=10;
+
     %objective
-    [turbine_centres,lev_cost_en]=model1(numT);
+    [~,lev_cost_en]=model1(numT);
     f=lev_cost_en;
 end

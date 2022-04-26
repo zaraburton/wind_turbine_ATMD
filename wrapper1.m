@@ -6,13 +6,15 @@
 %% Plot design space
 
 numT=10;
-[turbine_centres,lev_cost_en,power]=model1(numT);
+hubHeight=167.47;
+[turbine_centres,~] = initTurbPos(numT, hubHeight);
+
+
+%% Optimisation
 
 %geographical bounds for the wind farm
 LB=111139*[53.7 2.1];
 UB=111139*[54 2.8];
-
-%% Optimisation
 
 %starting point
 x0=turbine_centres;
@@ -24,21 +26,21 @@ options = optimoptions('fmincon','Algorithm','active-set','Display','iter-detail
 
 %figure 1: default position
 figure(1)
-plot(x0(:,2),x0(:,1),'bd');
+plot(x0(:,1)/111139,x0(:,2)/111139,'bd');
 title('Default position');
 xlabel('Longtitude'), ylabel('Latitude');
 
 %figure 2: optimised position
 figure(2)
-plot(xopt(:,2),xopt(:,1),'rd');
+plot(xopt(:,1)/111139,xopt(:,2)/111139,'rd');
 title('Optimised position');
 xlabel('Longtitude'), ylabel('Latitude');
 
 %figure 3: position together
 figure(3)
 hold
-plot(x0(:,2),x0(:,1),'bd');
-plot(xopt(:,2),xopt(:,1),'rd');
+plot(x0(:,1)/111139,x0(:,2)/111139,'bd');
+plot(xopt(:,1)/111139,xopt(:,2)/111139,'rd');
 title('Both');
 xlabel('Longtitude'), ylabel('Latitude');
 

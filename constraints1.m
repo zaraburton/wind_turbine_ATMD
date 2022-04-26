@@ -6,10 +6,21 @@
 function [C,Ceq]=constraints1(x)
 
     %Design var
+    %x=turbine_centres;
 
-    %constraints
+    %constant
+    numT=10;
+
+    %% constraints
     [turbine_centres,lev_cost_en]=model1(numT);
 
+    %inequality constraint 1: geographical bounds
+    C(1)=sum(turbine_centres(:,1)-54*111139)+...
+      sum(53.7*111139-turbine_centres(:,1))+...
+      sum(turbine_centres(:,2)-2.8*111139)+...
+      sum(2.1*111139-turbine_centres(:,2));
+
+    %inequality constraint 2: turbine clearance
     penalty=zeros(numT,numT);
     for i=1:length(turbine_centres)-1
         for j=1:length(turbine_centres)-1
@@ -26,14 +37,6 @@ function [C,Ceq]=constraints1(x)
     end
 
     C(2)=sum(penalty,'all');
-
-    %inequality constraint
-    C(1)=sum(turbine_centres(:,2)-54*111139)+...
-      sum(53.7*111139-turbine_centres(:,2))+...
-      sum(turbine_centres(:,1)-2.8*111139)+...
-      sum(turbine_centres(:,1)-2.1*111139);
-
-
 
     Ceq=[];
 end
