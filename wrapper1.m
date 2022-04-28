@@ -12,9 +12,15 @@ hubHeight=167.47;
 %% Optimisation
 
 %geographical bounds for the wind farm
-LB=111139*[53.7 2.1];
-UB=111139*[54 2.8];
+% LB=111139*[2.1 53.7];
+% UB=111139*[2.8 54.0];
+LB=zeros(numT,2);
+UB=zeros(numT,2);
 
+LB(:,1) = 111139*ones(numT,1)*2.1;
+LB(:,2) = 111139*ones(numT,1)*53.7;
+UB(:,1) = 111139*ones(numT,1)*2.8;
+UB(:,2) = 111139*ones(numT,1)*54.0;
 %starting point
 x0=turbine_centres;
 
@@ -42,6 +48,7 @@ plot(x0(:,1)/111139,x0(:,2)/111139,'bd');
 plot(xopt(:,1)/111139,xopt(:,2)/111139,'rd');
 title('Both');
 xlabel('Longtitude'), ylabel('Latitude');
+legend('default position','optimised position');
 
 %figure 4: LCOE
 % figure(4)

@@ -15,10 +15,10 @@ function [C,Ceq]=constraints1(x)
     [turbine_centres,lev_cost_en]=model1(numT);
 
     %inequality constraint 1: geographical bounds
-    C(1)=sum(turbine_centres(:,1)-54*111139)+...
-      sum(53.7*111139-turbine_centres(:,1))+...
-      sum(turbine_centres(:,2)-2.8*111139)+...
-      sum(2.1*111139-turbine_centres(:,2));
+%     C(1)=sum(turbine_centres(:,1)-54*111139)+...
+%       sum(53.7*111139-turbine_centres(:,1))+...
+%       sum(turbine_centres(:,2)-2.8*111139)+...
+%       sum(2.1*111139-turbine_centres(:,2));
 
     %inequality constraint 2: turbine clearance
     penalty=zeros(numT,numT);
@@ -36,7 +36,7 @@ function [C,Ceq]=constraints1(x)
         end
     end
 
-    C(2)=sum(penalty,'all');
+    C(1)=sum(penalty,'all');
 
     Ceq=[];
 end
