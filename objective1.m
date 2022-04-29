@@ -9,7 +9,7 @@ function [f]=objective1(x)
     %x=tubrine_centres;
 
     %constant
-    numT=100;
+    numT=10;
 
     %objective
     [~,lev_cost_en]=model1(numT);
