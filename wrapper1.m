@@ -5,7 +5,7 @@ close all
 
 %% Initialisation
 
-numT=10;
+numT=100;
 hubHeight=167.47;
 [turbine_centres,~] = initTurbPos(numT, hubHeight);
 
@@ -42,7 +42,7 @@ xlabel('Longtitude'), ylabel('Latitude');
 
 %figure 3: position together
 figure(4)
-hold
+hold, grid on;
 plot(x0(:,1)/111139,x0(:,2)/111139,'bd');
 plot(xopt(:,1)/111139,xopt(:,2)/111139,'rd');
 title('Both');

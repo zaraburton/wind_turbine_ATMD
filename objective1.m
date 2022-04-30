@@ -9,9 +9,9 @@ function [f]=objective1(x)
     %x=tubrine_centres;
 
     %constant
-    numT=10;
+    numT=100;
 
     %objective
-    [~,lev_cost_en]=model1(numT);
+    [turbine_centres,lev_cost_en]=model1(numT);
     f=lev_cost_en;
 end
