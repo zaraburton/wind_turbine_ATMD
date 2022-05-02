@@ -10,6 +10,7 @@ function Y = population2(n)
 % and -3, so , for each variable, we need 20 bits.
 % General formula: 2^(m-1) < (upper bound - lower bound)*10^p < 2^m-1
 % In this case: p = 5 and m = 20.
+
 % We have 2 variables (x and y), so we need 40 bits in total for binary
 % encoding.
 Y=round(rand(n,40));

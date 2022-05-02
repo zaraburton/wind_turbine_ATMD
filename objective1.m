@@ -3,15 +3,11 @@
 %convert watts to megawatts, and finally running LCOE calc. The objective
 %is to minimise LCOE.
 
-function [f]=objective1(x)
+function [x]=objective1(x0)
+%% objective
 
-    %Design var
-    %x=tubrine_centres;
+    [~,lev_cost_en,~]=model1(x0);
+    x = lev_cost_en;   
 
-    %constant
-    numT=100;
 
-    %objective
-    [turbine_centres,lev_cost_en]=model1(numT);
-    f=lev_cost_en;
 end

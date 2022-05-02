@@ -1,10 +1,7 @@
 function [LCOE] = LCOE(totalPower,num_t,TCA,ADlat,ADlon,A,supportLimits)
 %LCOE in MWH/EURO
-%   Detailed explanation goes here
-
-
  
-% ------- SUPPORT COSTS -------%
+%% ------- SUPPORT COSTS -------%
 
     % interpolate mesh grid of bathymetry data to get water depths at each
     % turbine location
@@ -41,8 +38,10 @@ tot_j = sum(j_tca(:,4),"all");
 %  Total support structure cost (in euros)
 tot_support_cost = tot_mp + tot_j;
 
+% rejoining arrays to return 
 
-%----- ELECTRICAL COSTS -------%
+
+%% ----- ELECTRICAL COSTS -------%
 % cable lengths
 c66_len = 830000;  % from hs3 %num_t*1000; %in m
 c120_len = 1038*4; % *4 now but up to 6, %45000;
@@ -69,13 +68,13 @@ numOnS = 1;
 
 totalElectricalCosts = c_ons_subs*numOnS + c_offs_subs*numOffS + c_ci + c_c66 + c_c120;
 
-%------- Other turbine materials & instilation cost ------%
+%% ------- Other turbine materials & instilation cost ------%
 % turbine part costs (in pounds)
 RN = 7000000*1.21; % rotor & nacelle
 instl = 1800000*1.21; % instilation of turbine, support & foundation 
 matInstCost = (RN + instl)*num_t; % totoal other part & instl cost
 
-%------- Other costs ------%
+%% ------- Other costs ------%
 pm_c = 37500000*1.21; % project management costs
 CAPEXv = [tot_support_cost, matInstCost, totalElectricalCosts, pm_c]; % prject cost w/o contingency
 CAPEX = sum(CAPEXv)*1.1; % CAPEX = set up costs for whole project + 10% contigency  (£)

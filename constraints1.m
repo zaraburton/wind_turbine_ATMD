@@ -9,7 +9,7 @@ function [C,Ceq]=constraints1(x)
     %x=turbine_centres;
 
     %constant
-    numT=100;
+    numT=10;
 
     %% constraints
     [turbine_centres,lev_cost_en]=model1(numT);

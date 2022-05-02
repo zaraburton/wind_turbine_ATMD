@@ -1,8 +1,10 @@
-function [lev_cost_en] = model(XL,YL)
+%main
+%This script calculate the power produced and local wind speed
 
-%calculuating the number of turbines (numT)
-[numT,numCols] = size(XL);
+clear all
+close all
 
+numT=300;
 
 % Support Design variables (which may get optimised)
 mp_limit_var = -30;
@@ -18,14 +20,13 @@ yaw_angles = zeros(1,numT); %Nx1 vector of yaw angle "offset" of each turbine
 diameters((1:numT)) = 120; %diameter of turbines
 location = [0 0 0]; %Mx3 matrix containing coordinates of where to evaluate M values of
 ... wind speed
-pc = readtable('6MW_powercurve.csv'); % power curve
-pc = table2array(pc);
+%pc = readtable('6MW_powercurve.csv'); % power curve
+%pc = table2array(pc);
+pc=csvread('6MW_powercurve.csv',1,0);
 
 % Calculating initial turbine positions
-%[turbine_centres, TCA] = initTurbPos(numT, hubHeight);
+[turbine_centres, TCA] = initTurbPos(numT, hubHeight);
 
-% creating position inputs for floris & cost model
-[turbine_centres, TCA] = turbPos(numT, hubHeight, XL, YL);
 
 % bathymetry data cost inputs
 [A,R] = readgeoraster('hsb.tif','OutputType','double');
@@ -44,12 +45,11 @@ y = 1:height;
     turbine_centres, yaw_angles, diameters, pc, location);
 
 % total power out of floris func
-totalPowerMW = sum(power)/1000000; %IN megaWATTS
+totalPowerMW = sum(power)/1000000 %IN megaWATTS
+
 
 
 % LCOE calc (in £/MWhr)
-[lev_cost_en] = LCOE(totalPowerMW,numT,TCA,ADlat,ADlon,A,supportLimits);
-
-end 
+[lev_cost_en] = LCOE(totalPowerMW,numT,TCA,ADlat,ADlon,A,supportLimits)
 
 

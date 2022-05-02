@@ -5,7 +5,7 @@ close all
 
 %% Initialisation
 
-numT=100;
+numT=10;
 hubHeight=167.47;
 [turbine_centres,~] = initTurbPos(numT, hubHeight);
 
