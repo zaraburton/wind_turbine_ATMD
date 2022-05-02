@@ -1,4 +1,4 @@
-%This script gives the averaged wind speed and direction
+ ()%This script gives the averaged wind speed and direction
 
 clear all
 close all

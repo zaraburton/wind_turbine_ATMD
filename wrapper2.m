@@ -25,7 +25,7 @@ options.InitialPopulationMatrix = X0;
 
 options = optimoptions('ga','Display','iter','PlotFcn',{'gaplotbestf','gaplotstopping'});
 rng default
-[xopt,fopt,exitflag,output] = ga(@objective1,2,[],[],[],[],LB,UB,[],options);
+[xopt,fopt,exitflag,output] = gamultiobj([@objective1,@objective1],2,[],[],[],[],LB,UB,[],options);
 %% Visualisation
 
 fprintf('The number of generations was : %d\n', output.generations);
