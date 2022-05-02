@@ -18,7 +18,7 @@ function [costTurbPos,lev_cost_en,power]=model1(x0)
     density = 1.225; %air density at the hub height
     wind_direction = 248.7403; %wind direction in degrees (clockwise+)
     yaw_angles = zeros(1,numT); %Nx1 vector of yaw angle "offset" of each turbine
-    diameters((1:numT)) = 167; %diameter of turbines
+    diameters((1:numT)) = 200; %diameter of turbines
     location = florisTurbPos; %Mx3 matrix containing coordinates of where to evaluate M values of
     ... wind speed
 %     pc = readtable('6MW_powercurve.csv'); % power curve

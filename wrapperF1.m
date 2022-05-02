@@ -7,7 +7,7 @@ notes = 'Only monopile support';
 %% Initialisation
 
 numT=10;
-hubHeight=206;
+hubHeight=182.5;
 %[turbine_centres,~] = initTurbPos(numT, hubHeight);
 [florisTurbPos,costTurbPos] = initTurbPos2(numT, hubHeight);
 
