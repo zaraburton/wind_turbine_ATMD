@@ -5,7 +5,6 @@ S = getGlobalS;
 % use: hornshape = S.Geometry to get coordinates of each corner
 xv = S.X;
 yv = S.Y;
-cb=[];
 for i=1:length(x0(:,1))
     y=x0(i,1);
     x=x0(i,2);

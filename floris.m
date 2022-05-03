@@ -43,10 +43,10 @@ function [power,speed] = floris(wind_speed,density,wind_direction,...
 %% SET-UP
 
 %Check for errors in inputs
-err=checkInputs(wind_speed,wind_direction,turbine_centres,yaw_angles,diameter,power_curve,location,density);
-if(err)
-    return
-end
+% err=checkInputs(wind_speed,wind_direction,turbine_centres,yaw_angles,diameter,power_curve,location,density);
+% if(err)
+%     return
+% end
 
 %Constants
 [size1, size2]=size(yaw_angles);
@@ -94,7 +94,7 @@ for nt=1:nturbs
         if(xt(jj)<xt(nt))
             %Calculate wake centre at nt
             [ywake,zwake]=wakecentre(xt(nt),afactor,yaw_rads(jj),xt(jj),yt(jj),zt(jj),diameter(jj));
-            %Calculate size of wake at nt
+%             %Calculate size of wake at nt
             dwake(3)=wakeexpand_q(xt(nt),3,diameter(jj),xt(jj));
             %Determine overlap
             lhs=sqrt((ywake-yt(nt))^2+(zwake-zt(nt))^2);
@@ -249,60 +249,60 @@ end
 
 %% LOCAL FUNCTIONS
 
-function err=checkInputs(wind_speed,wind_direction,turbine_centres,yaw_angles,diameter,power_curve,location,density)
+% function err=checkInputs(wind_speed,wind_direction,turbine_centres,yaw_angles,diameter,power_curve,location,density)
+% 
+% err=false;
+% 
+% if(wind_speed < 0)
+%     disp('ERROR: wind speed must be positive');
+%     disp(['Current value is ',num2str(wind_speed)]);
+%     err=true;
+% end
+% 
+% if(density < 0)
+%     disp('ERROR: density must be positive');
+%     disp(['Current value is ',num2str(density)]);
+%     err=true;
+% end
+% 
+% [nturbs,ndim]=size(turbine_centres);
+% if(ndim ~= 3)
+%     disp('ERROR: turbine_centres must be matrix with 3 columns');
+%     disp(['Currently has ',num2str(ndim),' columns']);
+%     err=true;
+% end
+% 
+% [nt1,nt2]=size(yaw_angles);
+% if(nturbs ~= max(nt1,nt2))
+%     disp('ERROR: number of yaw angles must be same as number of rows in turbine_centres');
+%     disp(['yaw_angles currently has ',num2str(max(nt1,nt2)),' entries, while turbine_centres has ',num2str(nturbs),' rows']);
+%     err=true;
+% end
+% 
+% [nt1,nt2]=size(diameter);
+% if(nturbs ~= max(nt1,nt2))
+%     disp('ERROR: number of diameters must be same as number of rows in turbine_centres');
+%     disp(['diameter currently has ',num2str(max(nt1,nt2)),' entries, while turbine_centres has ',num2str(nturbs),' rows']);
+%     err=true;
+% end
+% 
+% [pc1,pc2]=size(power_curve);
+% if(pc2 ~= 2)
+%     disp('ERROR: power_curve must be matrix with 2 columns');
+%     disp(['Currently has ',num2str(pc2),' columns']);
+%     err=true;
+% end
+% 
+% [loc1,loc2]=size(location);
+% if(loc2 ~= 3)
+%     disp('ERROR: location must be matrix with 3 columns');
+%     disp(['Currently has ',num2str(loc2),' columns']);
+%     err=true;
+% end
+% 
+% end
 
-err=false;
-
-if(wind_speed < 0)
-    disp('ERROR: wind speed must be positive');
-    disp(['Current value is ',num2str(wind_speed)]);
-    err=true;
-end
-
-if(density < 0)
-    disp('ERROR: density must be positive');
-    disp(['Current value is ',num2str(density)]);
-    err=true;
-end
-
-[nturbs,ndim]=size(turbine_centres);
-if(ndim ~= 3)
-    disp('ERROR: turbine_centres must be matrix with 3 columns');
-    disp(['Currently has ',num2str(ndim),' columns']);
-    err=true;
-end
-
-[nt1,nt2]=size(yaw_angles);
-if(nturbs ~= max(nt1,nt2))
-    disp('ERROR: number of yaw angles must be same as number of rows in turbine_centres');
-    disp(['yaw_angles currently has ',num2str(max(nt1,nt2)),' entries, while turbine_centres has ',num2str(nturbs),' rows']);
-    err=true;
-end
-
-[nt1,nt2]=size(diameter);
-if(nturbs ~= max(nt1,nt2))
-    disp('ERROR: number of diameters must be same as number of rows in turbine_centres');
-    disp(['diameter currently has ',num2str(max(nt1,nt2)),' entries, while turbine_centres has ',num2str(nturbs),' rows']);
-    err=true;
-end
-
-[pc1,pc2]=size(power_curve);
-if(pc2 ~= 2)
-    disp('ERROR: power_curve must be matrix with 2 columns');
-    disp(['Currently has ',num2str(pc2),' columns']);
-    err=true;
-end
-
-[loc1,loc2]=size(location);
-if(loc2 ~= 3)
-    disp('ERROR: location must be matrix with 3 columns');
-    disp(['Currently has ',num2str(loc2),' columns']);
-    err=true;
-end
-
-end
-
-function afactor=inductionFactor(astart,cp)
+function afactor=inductionFactor(~,cp)
 sols=roots([4 -8 4 -cp]);
 sols=sort(sols);
 afactor=sols(2);

@@ -1,6 +1,6 @@
 function [nvp] = NVP(yrlymoney, yrs, WACC)
 % calculates NVP
-nvp = [];
+nvp = zeros(yrs);
 for yr=1:yrs
     nvp(yr) = yrlymoney(yr)/((1+WACC)^yr);
 end

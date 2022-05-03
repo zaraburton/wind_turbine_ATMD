@@ -1,36 +1,141 @@
-%wrapper module 2 - ga
-%warning: this takes time to run!
+%wrapper module 2 - gamultiobj
+
 clear all
 close all
 
+tic
+notes = 'Only monopile support';
 %% Initialisation
 
-numT=100;
-hubHeight=167.47;
-[turbine_centres,~] = initTurbPos(numT, hubHeight);
-x = turbine_centres(:,1:2);
+numT=10;
+hubHeight=182.5;
+%[turbine_centres,~] = initTurbPos(numT, hubHeight);
+[florisTurbPos,costTurbPos] = PosForGA(numT, hubHeight);
+x0=florisTurbPos;
+
+%% plot initial positions
+
+f1=figure;
+% plot bathymetry data
+
+
+    % bathymetry data 
+    [a,R] = readgeoraster('hsb.tif','OutputType','double');
+    %latlim = R.LatitudeLimits;
+    %longlim = R.LongitudeLimits;
+    info = geotiffinfo('hsb.tif');
+    height = info.Height; % Integer indicating the height of the image in pixels
+    width = info.Width; % Integer indicating the width of the image in pixels
+    x = 1:width;
+    y = 1:height;
+    [rows,cols] = meshgrid(y,x);
+    [ADlat,ADlon] = pix2latlon(info.RefMatrix, rows, cols);
+  
+    
+    % LCOE func WANTS ADLAT, ADLONG, A - setting global bathymetry data to
+    % speed up
+    bath=[ADlat,ADlon];
+    setGlobalB(bath);
+    setGlobalA(a);
+
+
+% cropping bathymetry data to fit map plot better
+latlim =[53.68 54.01];
+lonlim=[2.18 2.81];
+[B,RB] = geocrop(a,R,latlim,lonlim);
+
+%Create a world map by specifying latitude and longitude limits.
+latlim = [53.68 54.01];
+lonlim = [2.18 2.81];
+worldmap(latlim,lonlim)
+
+
+% show bathymetry data
+geoshow(B,RB,'DisplayType','surface')
+cb = colorbar;
+cb.Label.String = 'Sea Bed Depth in Meters';
+
+
+
+% plotting shape outline
+
+% reading hornsea shapefile
+%S = shaperead('horn3shape.shp');
+setGlobalS(shaperead('horn3shape.shp'))
+S = getGlobalS;
+
+% use: hornshape = S.Geometry to get coordinates of each corner
+x1 = S.X;
+y1 = S.Y;
+%orangeline = makesymbolspec('patch',{'Default','EdgeColor','#FF7401'});
+%%orange line
+% showing shape on the map
+geoshow(S.Y,S.X);
+
+
+% Plotting turbine positions
+
+latINIT = costTurbPos(:,1);
+longINIT = costTurbPos(:,2);
+
+% plot each turbine as a point
+for i=1:length(latINIT)
+    p = geopoint(latINIT(i),longINIT(i));
+    geoshow(p,'DisplayType','Point');
+
+    if i == 1
+        hold on
+    end
+end
+
+title('Initial Position')
+
+hold off 
+
+
 %% Optimisation
 
+% function
+fun = @objective1;
+
 %geographical bounds for the wind farm
-LB=zeros(numT,2);
-UB=zeros(numT,2);
+lb=zeros(numT,2);
+ub=zeros(numT,2);
 
-LB(:,1) = 111139*ones(numT,1)*2.1;
-LB(:,2) = 111139*ones(numT,1)*53.7;
-UB(:,1) = 111139*ones(numT,1)*2.8;
-UB(:,2) = 111139*ones(numT,1)*54.0;
+% reading hornsea shapefile for upper and lower bounds in degrees
 
-X0 = x; % Start point (row vector)
-options.InitialPopulationMatrix = X0;
+min_long_x = S.BoundingBox(1,1); % in deg
+max_long_x = S.BoundingBox(2,1); % in deg
+min_lat_y = S.BoundingBox(1,2); % in deg
+max_lat_y = S.BoundingBox(2,2); % in deg
 
+lb(:,1)=min_lat_y; 
+lb(:,2)=min_long_x;
+ub(:,1)=max_lat_y; 
+ub(:,2)=max_long_x;
+
+
+% other empty constriants
+A = [];
+b = [];
+Aeq = [];
+beq = [];
+nonlcon = @constraints1;
+
+options.InitialPopulationMatrix = x0;
+
+% options1 = optimoptions('fmincon','Algorithm','active-set','Display','iter-detailed','PlotFcn','optimplotfval');
 options = optimoptions('ga','Display','iter','PlotFcn',{'gaplotbestf','gaplotstopping'});
-rng default
-[xopt,fopt,exitflag,output] = gamultiobj([@objective1,@objective1],2,[],[],[],[],LB,UB,[],options);
+[x,fval,exitflag,output,population,scores]=ga(fun,2,A,b,Aeq,beq,lb,ub,nonlcon,options);
+%[x,fval] = fmincon(fun,x0,A,b,Aeq,beq,lb,ub);
+
+toc
+
 %% Visualisation
 
 fprintf('The number of generations was : %d\n', output.generations);
 fprintf('The number of function evaluations was : %d\n', output.funccount);
-fprintf('The best function value found was : %g\n', fopt);
+fprintf('The best function value found was : %g\n', fval);
 % %figure 1: default position
 % figure(1)
 % plot(x0(:,1)/111139,x0(:,2)/111139,'bd');

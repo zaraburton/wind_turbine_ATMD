@@ -16,12 +16,12 @@ function [LCOE] = LCOE(totalPower,num_t,TCA,ADlat,ADlon,A,supportLimits)
     
     %cost of support types - from minimalistic cost model 
 gp = 6; %installed generator power in MW (6MW used on site)
-c_t = 1.25*(-0.15+0.92*gp); %cost of wind turbine
+% c_t = 1.25*(-0.15+0.92*gp); %cost of wind turbine
 
 %support structure cost equations (for reference, not used in code)
 d = 25; %water depth in m
-c_mp = (gp*(d*d +100*d +1500))/7500; %monopile
-c_j = (gp*(0.5*(d*d)-35*d+2500))/7500; %jacket support structure
+% c_mp = (gp*(d*d +100*d +1500))/7500; %monopile
+% c_j = (gp*(0.5*(d*d)-35*d+2500))/7500; %jacket support structure
 
 mpd = abs(mp_tca(:,3)); %monopile depth
 mp_tca(:,4) = ((gp*(mpd.^2 +100*mpd +1500))/7500)*1000000; % cost of monopile support in euros
@@ -79,7 +79,7 @@ pm_c = 37500000*1.21; % project management costs
 CAPEXv = [tot_support_cost, matInstCost, totalElectricalCosts, pm_c]; % prject cost w/o contingency
 CAPEX = sum(CAPEXv)*1.1; % CAPEX = set up costs for whole project + 10% contigency  (£)
 % percentage of cost to support (not included contgency)
-su_found_percent = (tot_support_cost/sum(CAPEXv))*100;
+% su_found_percent = (tot_support_cost/sum(CAPEXv))*100;
 
 % OPEX
 % assumed to be 3% of capex per yer    (£/MW/yr)
@@ -100,7 +100,7 @@ for yr = 7:yrs
     %cash(1,yr) = energy_strike_yr1*((inflation)^(yr-1))*production %cash in each year
     cash(yr) = cash(yr-1)*(1+inflation); % cash out each yr (excluding CAPEX)
 end
-cash;
+% cash;
 
 WACC = 0.06;  
 nvpCost = NVP(cash, yrs, WACC);

@@ -1,16 +1,17 @@
-%wrapper module 1 - fmincon
+%wrapper module 2 - gamultiobj
 
 clear all
 close all
+
 tic
 notes = 'Only monopile support';
 %% Initialisation
 
-numT=10;
+numT=231;
 hubHeight=182.5;
 %[turbine_centres,~] = initTurbPos(numT, hubHeight);
-[florisTurbPos,costTurbPos] = initTurbPos2(numT, hubHeight);
-
+[florisTurbPos,costTurbPos] = PosForGA(numT, hubHeight);
+x0=florisTurbPos;
 %% plot initial positions
 
 f1=figure;
@@ -120,82 +121,41 @@ Aeq = [];
 beq = [];
 nonlcon = @mycon;
 
-%starting point
-%x0=turbine_centres(:,1:2)
-x0 = costTurbPos(:,1:2);
-
+options.InitialPopulationMatrix = x0;
 
 % options1 = optimoptions('fmincon','Algorithm','active-set','Display','iter-detailed','PlotFcn','optimplotfval');
-options2 = optimoptions('fmincon','Algorithm',"interior-point",'Display','iter-detailed','PlotFcn','optimplotfval', 'MaxFunctionEvaluations',1000*numT, 'FunctionTolerance', 0.0000001);
-
-[x,fval,exitflag,output,lambda,grad,hessian]=fmincon(fun,x0,A,b,Aeq,beq,lb,ub,nonlcon,options2);
+options = optimoptions('ga','Display','iter','PlotFcn',{'gaplotbestf','gaplotstopping'});
+[x,fval,exitflag,output,population,scores]=ga(fun,2,A,b,Aeq,beq,lb,ub,@constraints1,options);
 %[x,fval] = fmincon(fun,x0,A,b,Aeq,beq,lb,ub);
 
+toc
 
+%% Visualisation
 
-%% Result visualisation
-
-
-fval;
-
-
-txt = {['LCOE: ',num2str(fval)],['Num Turbines: ',num2str(numT)], notes};
-
-f2=figure;
-% plot bathymetry data
-worldmap(latlim,lonlim)
-% show bathymetry data
-geoshow(B,RB,'DisplayType','surface')
-cb = colorbar;
-cb.Label.String = 'Sea Bed Depth in Meters';
-
-
-% plotting shape outline
-% showing shape on the map
-geoshow(S.Y,S.X);
-
-
-% Plotting turbine positions
-latPos = x(:,1);
-longPos = x(:,2);
-
-% plot each turbine as a point
-for i=1:length(latPos)
-    p = geopoint(latPos(i),longPos(i));
-    geoshow(p,'DisplayType','Point');
-
-    if i == 1
-        hold on
-    end
-end
-
-title(txt)
-
-hold off 
-
-
+fprintf('The number of generations was : %d\n', output.generations);
+fprintf('The number of function evaluations was : %d\n', output.funccount);
+fprintf('The best function value found was : %g\n', fval);
 % %figure 1: default position
-% figure(2)
+% figure(1)
 % plot(x0(:,1)/111139,x0(:,2)/111139,'bd');
 % title('Default position');
 % xlabel('Longtitude'), ylabel('Latitude');
 % 
 % %figure 2: optimised position
-% figure(3)
+% figure(2)
 % plot(xopt(:,1)/111139,xopt(:,2)/111139,'rd');
 % title('Optimised position');
 % xlabel('Longtitude'), ylabel('Latitude');
 % 
 % %figure 3: position together
-% figure(4)
+% figure(3)
 % hold
 % plot(x0(:,1)/111139,x0(:,2)/111139,'bd');
 % plot(xopt(:,1)/111139,xopt(:,2)/111139,'rd');
 % title('Both');
 % xlabel('Longtitude'), ylabel('Latitude');
 % legend('default position','optimised position');
-
-%figure 4: LCOE
-% figure(4)
-% plot(LCOE);
-toc
+% 
+% %figure 4: LCOE
+% % figure(4)
+% % plot(LCOE);

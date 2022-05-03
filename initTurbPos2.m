@@ -10,7 +10,7 @@ max_long_x = S.BoundingBox(2,1); % in deg
 min_lat_y = S.BoundingBox(1,2); % in deg
 max_lat_y = S.BoundingBox(2,2); % in deg
 
-Theight = 34.97; % turbine height (m)
+Theight = 182.5; % turbine height (m)
 
 TurbLL = zeros([numT,2]); % Tubine longitude and latitude coords (degrees) 
 
