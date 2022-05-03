@@ -1,7 +1,7 @@
 function [florisTurbPos,costTurbPos] = initTurbPos2(numT, hubHeight)
 %% Creates initial turbine position arrays for floris (in meters) & cost function (in degrees)
 
-%number of turbines = num
+%number of turbines
 
 % reading hornsea shapefile for upper and lower bounds in degrees
 S = shaperead('horn3shape.shp');
