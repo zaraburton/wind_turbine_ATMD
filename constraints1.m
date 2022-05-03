@@ -11,7 +11,7 @@ function [C,Ceq]=constraints1(x)
     %constant
     numT=10;
 
-    %% constraints
+    %% proximity constraint
     [turbine_centres,lev_cost_en]=model1(numT);
 
     %inequality constraint 1: geographical bounds

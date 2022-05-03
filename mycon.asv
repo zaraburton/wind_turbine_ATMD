@@ -19,7 +19,7 @@ for turbA=1:numT
     end
 end
 
-cp;
+cp
 
 %% Area boundary constraints
 
@@ -37,14 +37,14 @@ for i=1:length(x0(:,1))
     cb(i) = p_poly_dist(x, y, xv, yv);
 end
 
-cb;
+cb
 
 %% Constraint results scaling 
 
 cScale = 100;
 
 %c = (cb+cp)*cScale;  % Compute nonlinear inequalities at x.n (to satisfy c must be < 0)
-c=[cb(:),cp(:)]*cScale;
+c=cb*
 ceq = []; % Compute nonlinear equalities at x.
 
 end

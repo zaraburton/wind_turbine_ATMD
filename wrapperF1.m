@@ -6,9 +6,8 @@ close all
 notes = 'Only monopile support';
 %% Initialisation
 
-numT=10;
+numT=230;
 hubHeight=182.5;
-%[turbine_centres,~] = initTurbPos(numT, hubHeight);
 [florisTurbPos,costTurbPos] = initTurbPos2(numT, hubHeight);
 
 %% plot initial positions
@@ -126,18 +125,22 @@ x0 = costTurbPos(:,1:2);
 
 options1 = optimoptions('fmincon','Algorithm','active-set','Display','iter-detailed','PlotFcn','optimplotfval');
 options2 = optimoptions('fmincon','Algorithm',"interior-point",'Display','iter-detailed','PlotFcn','optimplotfval', 'MaxFunctionEvaluations',1000*numT, 'FunctionTolerance', 0.0000001);
+options3= optimoptions('fmincon','Algorithm',"interior-point",'Display','iter-detailed','MaxFunctionEvaluations',5000*numT, 'FunctionTolerance', 0.0000001);
 
-[x,fval,exitflag,output,lambda,grad,hessian]=fmincon(fun,x0,A,b,Aeq,beq,lb,ub,nonlcon,options2)
+[x,fval,exitflag,output,lambda,grad,hessian]=fmincon(fun,x0,A,b,Aeq,beq,lb,ub,nonlcon,options3);
 %[x,fval] = fmincon(fun,x0,A,b,Aeq,beq,lb,ub);
 
 
 
+%% Printing output
+
+exitflag
+grad
+
+%array of best feasible turbine positions
+bfp = output.bestfeasible.fval
+
 %% Result visualisation
-
-
-fval
-
-
 txt = {['LCOE: ',num2str(fval)],['Num Turbines: ',num2str(numT)], notes};
 
 f2=figure;
@@ -153,10 +156,12 @@ cb.Label.String = 'Sea Bed Depth in Meters';
 % showing shape on the map
 geoshow(S.Y,S.X);
 
+%array of best feasible turbine positions
+bfp = output.bestfeasible.x;
 
 % Plotting turbine positions
-latPos = x(:,1);
-longPos = x(:,2);
+latPos = bfp(:,1);
+longPos = bfp(:,2);
 
 % plot each turbine as a point
 for i=1:length(latPos)
