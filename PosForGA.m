@@ -1,0 +1,45 @@
+function [florisTurbPos,costTurbPos] = PosForGA(numT, hubHeight)
+%% Creates initial turbine position arrays for floris (in meters) & cost function (in degrees)
+
+%number of turbines
+
+% reading hornsea shapefile for upper and lower bounds in degrees
+S = shaperead('horn3shape.shp');
+min_long_x = S.BoundingBox(1,1); % in deg
+max_long_x = S.BoundingBox(2,1); % in deg
+min_lat_y = S.BoundingBox(1,2); % in deg
+max_lat_y = S.BoundingBox(2,2); % in deg
+
+Theight = 182.5; % turbine height (m)
+
+TurbLL = zeros([numT,2]); % Tubine longitude and latitude coords (degrees) 
+
+%% Generate points in polygon
+
+yv = S.Y(1:12);
+xv = S.X(1:12);
+
+for i = 1:numT
+    flagIsIn = 0;
+    %point is in polygon only if flagIsIn is true
+    while ~flagIsIn
+        x = min_long_x + (max_long_x-min_long_x)*rand;
+        y = min_lat_y + (max_lat_y-min_lat_y)*rand; 
+        flagIsIn = inpolygon(x,y,xv,yv);
+    end
+
+    TurbLL(i,2) = y;
+    TurbLL(i,1) = x;
+end
+
+% plot(xv,yv,TurbLL(:,1),TurbLL(:,2),'r+');
+
+% Creating turbine centers array for floris input [X, Y, Z]
+Tyx = deg2km(TurbLL)*1000; % converting from degrees - km - meters
+Tz = hubHeight*ones(numT,1);
+florisTurbPos = [Tyx(:,2),Tyx(:,1),Tz]; % (m)
+
+% Turbine long and latidue positions for cost input [lat(y), long(x), 0, 0]
+costTurbPos = [TurbLL, zeros([numT,2])]; %turbine cost array
+
+end 
